@@ -29,4 +29,4 @@ Colegio de Abogados).
 
 ## Pendientes
 
-Ver `insumos/dudas.md` (horario, teléfono de la puerta, dominio, nombres del equipo). Análisis de referencias en `insumos/ANALISIS.md`.
+Ver `../insumos/dudas.md` (horario, teléfono de la puerta, dominio, nombres del equipo). Análisis de referencias en `../insumos/ANALISIS.md`.
