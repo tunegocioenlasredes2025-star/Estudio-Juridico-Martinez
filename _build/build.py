@@ -13,7 +13,7 @@ import datos as D
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIDAS = json.loads((ROOT / "_build" / "medidas.json").read_text(encoding="utf-8"))
-V = "2"  # subir al cambiar css/js (cache inmutable en vercel.json)
+V = "5"  # subir al cambiar css/js (cache inmutable en vercel.json)
 HOY = date.today().isoformat()
 ANIOS = date.today().year - D.FUNDACION
 
@@ -49,15 +49,16 @@ def icono(nombre):
         "ig": '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/>',
         "pin": '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
         "reloj": '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
-        "tel": '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
         "check": '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
         "menu": '<path d="M4 7h16M4 12h16M4 17h16"/>',
         "cerrar": '<path d="M6 6l12 12M18 6L6 18"/>',
         "estrella": '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="currentColor" stroke="none"/>',
         "familia": '<circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="7" r="2.5"/><circle cx="12" cy="13" r="2"/><path d="M3.5 20v-3a4 4 0 0 1 4-4h1M20.5 20v-3a4 4 0 0 0-4-4h-1M9 20v-1.5a3 3 0 0 1 6 0V20"/>',
         "laboral": '<rect x="3.5" y="7.5" width="17" height="12" rx="1.5"/><path d="M9 7.5V5.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3.5 12.5h17"/>',
-        "civil-comercial": '<path d="M7 3.5h7l4 4v13H7z"/><path d="M14 3.5v4h4M9.5 12h6M9.5 15.5h6"/>',
-        "escudo": '<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/>',
+        "civil": '<path d="M3.5 10.5L12 4l8.5 6.5"/><path d="M5.5 10v10h13V10M10 20v-5.5h4V20"/>',
+        "sucesiones": '<path d="M6 3.5h9l3.5 3.5v13H6z"/><path d="M14.5 3.5v4h4M9 12h6M9 15.5h4"/>',
+        "escudo": '<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M9.5 11.8l1.8 1.8 3.4-3.4"/>',
+        "documento": '<path d="M7 3.5h7l4 4v13H7z"/><path d="M14 3.5v4h4M9.5 12h6M9.5 15.5h6"/>',
     }[nombre]
     return (f'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
             f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{trazos}</svg>')
@@ -72,10 +73,10 @@ BALANZA = ('<svg class="balanza" viewBox="0 0 48 48" fill="none" stroke="current
 
 NAV = [
     ("/familia/", "Familia"),
+    ("/sucesiones/", "Sucesiones"),
+    ("/civil/", "Civil"),
     ("/laboral/", "Laboral"),
-    ("/civil-comercial/", "Civil y comercial"),
     ("/el-estudio/", "El estudio"),
-    ("/primera-consulta/", "Primera consulta"),
     ("/contacto/", "Contacto"),
 ]
 
@@ -105,7 +106,8 @@ def header(actual):
 
 
 def footer():
-    areas = "".join(f'<li><a href="/{a["slug"]}/">{a["nombre"]}</a></li>' for a in D.AREAS)
+    familia = "".join(f'<li><a href="/familia/{t["slug"]}/">{t["nombre"]}</a></li>' for t in D.TEMAS_FAMILIA)
+    otras = "".join(f'<li><a href="/{a["slug"]}/">{a["nombre"]}</a></li>' for a in D.AREAS_SEC)
     horarios = "".join(f"<li><span>{d}</span> {h}</li>" for d, h in D.HORARIOS)
     return f"""<footer class="pie">
   <div class="wrap pie__grid">
@@ -114,19 +116,18 @@ def footer():
       <p>Estudio jurídico familiar. Acompañamos a las familias merlenses desde {D.FUNDACION}, creciendo con ellas y sus necesidades.</p>
     </div>
     <div>
-      <h2 class="pie__tit">Áreas</h2>
-      <ul class="pie__lista">{areas}<li><a href="/primera-consulta/">Primera consulta</a></li></ul>
+      <h2 class="pie__tit">Familia</h2>
+      <ul class="pie__lista">{familia}</ul>
     </div>
     <div>
-      <h2 class="pie__tit">Visitanos</h2>
+      <h2 class="pie__tit">Otras áreas</h2>
+      <ul class="pie__lista">{otras}<li><a href="/primera-consulta/">Primera consulta</a></li><li><a href="/el-estudio/">El estudio</a></li></ul>
+    </div>
+    <div>
+      <h2 class="pie__tit">Dónde estamos</h2>
       <ul class="pie__lista">
         <li><a href="{D.MAPS}" target="_blank" rel="noopener">{D.DIRECCION}<br>{D.LOCALIDAD}, {D.PROVINCIA}</a></li>
         {horarios}
-      </ul>
-    </div>
-    <div>
-      <h2 class="pie__tit">Contacto</h2>
-      <ul class="pie__lista">
         <li><a href="{WA_GENERAL}" target="_blank" rel="noopener">{icono("wa")} {D.TEL_VISIBLE}</a></li>
         <li><a href="{D.INSTAGRAM}" target="_blank" rel="noopener">{icono("ig")} @estudio.juridico.martinez</a></li>
       </ul>
@@ -146,13 +147,14 @@ def schema_estudio():
         "@type": "LegalService",
         "@id": D.SITIO + "/#estudio",
         "name": D.NOMBRE,
-        "description": "Estudio jurídico familiar en Merlo desde 1976: derecho de familia, laboral y civil y comercial.",
+        "description": f"Estudio jurídico familiar en Merlo desde {D.FUNDACION}: derecho de familia, sucesiones, civil y laboral.",
         "url": D.SITIO + "/",
         "image": D.SITIO + "/og.jpg",
         "logo": D.SITIO + "/favicon/icon-512.png",
         "telephone": "+" + D.WHATSAPP,
         "foundingDate": str(D.FUNDACION),
-        "founder": {"@type": "Person", "name": "Miguel Ángel Martínez", "jobTitle": "Abogado"},
+        "founder": {"@type": "Person", "name": D.FUNDADOR, "jobTitle": "Abogado"},
+        "employee": {"@type": "Person", "name": D.A_CARGO, "jobTitle": "Abogada"},
         "address": {"@type": "PostalAddress", "streetAddress": D.DIRECCION, "addressLocality": D.LOCALIDAD,
                     "postalCode": D.CP, "addressRegion": D.PROVINCIA, "addressCountry": "AR"},
         "geo": {"@type": "GeoCoordinates", "latitude": D.LAT, "longitude": D.LNG},
@@ -160,9 +162,10 @@ def schema_estudio():
         "openingHoursSpecification": [
             {"@type": "OpeningHoursSpecification", "dayOfWeek": h["dias"], "opens": h["abre"], "closes": h["cierra"]}
             for h in D.HORARIO_SCHEMA],
-        "areaServed": ["Merlo", "San Antonio de Padua", "Libertad", "Pontevedra", "Ituzaingó", "Moreno"],
-        "knowsAbout": ["Derecho de familia", "Divorcio", "Cuota alimentaria", "Sucesiones",
-                       "Derecho laboral", "Despidos", "Accidentes de trabajo", "Derecho civil", "Contratos", "Alquileres"],
+        "areaServed": D.ZONA,
+        "knowsAbout": ["Derecho de familia", "Divorcio", "Cuota alimentaria", "Tenencia de hijos",
+                       "Régimen de comunicación", "Violencia familiar", "Uniones convivenciales",
+                       "División de bienes", "Sucesiones", "Usucapión", "Daños y perjuicios", "Derecho laboral"],
         "sameAs": [D.INSTAGRAM],
     }
 
@@ -223,12 +226,15 @@ def pagina(ruta, titulo, descripcion, cuerpo, schemas=(), actual=None):
 
 
 def escribir(ruta, html):
-    destino = ROOT / ruta.strip("/") / "index.html" if ruta != "/404" else ROOT / "404.html"
-    if ruta == "/":
-        destino = ROOT / "index.html"
+    destino = ROOT / "404.html" if ruta == "/404" else (
+        ROOT / "index.html" if ruta == "/" else ROOT / ruta.strip("/") / "index.html")
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(html, encoding="utf-8")
     print("ok", ruta)
+
+
+def parrafos(textos):
+    return "".join(f"<p>{t}</p>" for t in textos)
 
 
 def faq_html(preguntas, titulo="Preguntas frecuentes"):
@@ -237,13 +243,14 @@ def faq_html(preguntas, titulo="Preguntas frecuentes"):
     return f"""<section class="sec faq" aria-labelledby="faq-t">
   <div class="wrap faq__grid">
     <div><p class="eyebrow">Dudas comunes</p><h2 id="faq-t" class="h2">{titulo}</h2>
-    <p class="muted">¿La tuya no está? <a class="link" href="{WA_GENERAL}" target="_blank" rel="noopener">Preguntanos por WhatsApp</a>.</p></div>
+    <p class="muted">¿La tuya no está? <a class="link" href="{WA_GENERAL}" target="_blank" rel="noopener">Escribinos y la vemos</a>.</p></div>
     <div class="faq__lista">{items}</div>
   </div>
 </section>"""
 
 
-def cta_final(titulo="¿Querés que lo veamos juntos?", texto="Contanos tu situación por WhatsApp y coordinamos una entrevista, en el estudio o por videollamada."):
+def cta_final(titulo="¿Querés que lo veamos juntos?",
+              texto="Contanos tu situación por WhatsApp y coordinamos una entrevista, en el estudio o por videollamada."):
     horarios = " · ".join(f"{d} {h}" for d, h in D.HORARIOS)
     return f"""<section class="cta-final">
   <div class="wrap cta-final__in reveal">
@@ -258,17 +265,39 @@ def cta_final(titulo="¿Querés que lo veamos juntos?", texto="Contanos tu situa
 </section>"""
 
 
+def bloque_consulta(compacto=False):
+    """Cómo es la primera consulta y qué conviene traer: es lo que baja la ansiedad de quien nunca consultó."""
+    traer = "".join(f"<li>{icono('check')}<span><b>{t}</b>{x}</span></li>" for t, x in D.LLEVAR[:4 if compacto else 6])
+    esperar = "".join(f"""<li class="esperar"><h3 class="h4">{t}</h3><p>{x}</p></li>""" for t, x in D.ESPERAR)
+    return f"""<section class="sec consulta" id="primera-consulta">
+  <div class="wrap consulta__grid">
+    <div class="reveal">
+      <p class="eyebrow">La primera consulta</p>
+      <h2 class="h2">Qué pasa cuando venís por primera vez</h2>
+      <p class="muted">Muchas personas llegan al estudio sin haber hablado nunca con un abogado. Esto es lo que podés esperar de la entrevista.</p>
+      <ul class="esperar__lista">{esperar}</ul>
+      <a class="link" href="/primera-consulta/">Ver la primera consulta en detalle {icono("flecha")}</a>
+    </div>
+    <div class="traer reveal">
+      <h3 class="h3">Qué conviene traer</h3>
+      <ul class="traer__lista">{traer}</ul>
+      <p class="traer__nota">Si te falta algo, vení igual: en la entrevista vemos cómo conseguirlo.</p>
+    </div>
+  </div>
+</section>"""
+
+
 def opiniones_html():
     tarjetas = "".join(f"""<figure class="opinion reveal">
       <div class="estrellas" aria-label="5 de 5 estrellas">{icono("estrella") * 5}</div>
       <blockquote>“{escape(t)}”</blockquote>
-      <figcaption>{escape(n)} · opinión en Google</figcaption>
+      <figcaption>{escape(n)}</figcaption>
     </figure>""" for n, t in D.OPINIONES)
     return f"""<section class="sec opiniones" aria-labelledby="op-t">
   <div class="wrap">
     <div class="sec__cab">
-      <p class="eyebrow">Lo que dicen de nosotros</p>
-      <h2 id="op-t" class="h2">{D.PUNTAJE} estrellas en Google</h2>
+      <p class="eyebrow">Opiniones publicadas en Google</p>
+      <h2 id="op-t" class="h2">Lo que dejaron escrito quienes nos consultaron</h2>
     </div>
     <div class="opiniones__grid">{tarjetas}</div>
     <p class="centro"><a class="link" href="{D.MAPS}" target="_blank" rel="noopener">Ver la ficha en Google Maps {icono("flecha")}</a></p>
@@ -276,120 +305,196 @@ def opiniones_html():
 </section>"""
 
 
+def historia_fotos():
+    return f"""<div class="historia__fotos reveal">
+      <figure class="historia__diploma">{img("diploma-uba", f"Diploma de abogado de la Universidad de Buenos Aires del Dr. {D.FUNDADOR}", "(min-width: 960px) 34vw, 90vw")}
+        <figcaption>El diploma de la UBA del fundador.</figcaption></figure>
+      <figure class="historia__premio">{img("fundador-reconocimiento", f"El Dr. {D.FUNDADOR} con el reconocimiento del Colegio de Abogados de Morón", "(min-width: 960px) 20vw, 50vw")}
+        <figcaption>Reconocimiento por 50 años de matrícula, 2026.</figcaption></figure>
+    </div>"""
+
+
 # ---------------------------------------------------------------- páginas
 
 def home():
-    chips = [
-        ("Divorcio", "divorcio"), ("Cuota alimentaria", "cuota alimentaria"),
-        ("Régimen de comunicación", "régimen de comunicación con mis hijos"),
-        ("Sucesión", "una sucesión"), ("Despido", "un despido"), ("Accidente / ART", "un accidente de trabajo (ART)"),
-        ("Alquiler", "un alquiler"), ("Choque", "un accidente de tránsito"), ("Otro tema", "otro tema"),
-    ]
-    chips_html = "".join(
-        f'<a class="chip" href="{wa("Hola! Quisiera coordinar una entrevista por un tema de " + m + ".")}" target="_blank" rel="noopener">{t}</a>'
-        for t, m in chips)
+    temas = "".join(f"""<a class="tf reveal" style="--d:{i * 60}ms" href="/familia/{t["slug"]}/">
+        <h3 class="h4">{t["nombre"]}</h3>
+        <p>{t["resumen"]}</p>
+        <span class="tf__mas">Ver más {icono("flecha")}</span>
+      </a>""" for i, t in enumerate(D.TEMAS_FAMILIA))
 
-    areas_html = ""
-    for i, a in enumerate(D.AREAS):
-        temas = "".join(f'<li><a href="/{a["slug"]}/#{s}">{t}</a></li>' for s, t, *_ in a["temas"])
-        areas_html += f"""<article class="area reveal" style="--d:{i * 90}ms">
-      <a class="area__foto" href="/{a["slug"]}/" tabindex="-1" aria-hidden="true">{img(a["foto"], "", "(min-width: 960px) 30vw, 90vw")}</a>
-      <div class="area__cuerpo">
-        <p class="area__num">0{i + 1}</p>
-        <h3 class="h3"><a href="/{a["slug"]}/">{a["nombre"]}</a></h3>
-        <p>{a["resumen"]}</p>
-        <ul class="area__temas">{temas}</ul>
-        <a class="link" href="/{a["slug"]}/">Conocer el área {icono("flecha")}</a>
-      </div>
-    </article>"""
-
-    pasos = "".join(f"""<li class="paso reveal" style="--d:{i * 80}ms"><span class="paso__n">{i + 1}</span>
-      <h3 class="h4">{t}</h3><p>{x}</p></li>""" for i, (t, x) in enumerate(D.PASOS))
+    otras = "".join(f"""<a class="otra reveal" style="--d:{i * 70}ms" href="/{a["slug"]}/">{icono(a["icono"])}
+        <span><b>{a["nombre"]}</b>{a["resumen"]}</span>{icono("flecha")}</a>""" for i, a in enumerate(D.AREAS_SEC))
 
     cuerpo = f"""<section class="hero">
   <div class="wrap hero__grid">
     <div class="hero__txt">
-      <p class="eyebrow">Estudio jurídico familiar · Merlo</p>
-      <h1 class="h1">Acompañamos a las familias de Merlo desde <em>{D.FUNDACION}</em>.</h1>
-      <p class="hero__sub">Derecho de familia, laboral y civil y comercial. Te explicamos tu situación con palabras claras y te acompañamos en cada paso, con la experiencia de {ANIOS} años en el barrio.</p>
+      <p class="eyebrow">Derecho de familia · Merlo</p>
+      <h1 class="h1">Abogados de familia en Merlo, <em>desde {D.FUNDACION}</em>.</h1>
+      <p class="hero__sub">Divorcios, cuota alimentaria, tenencia y régimen de comunicación, violencia familiar, uniones convivenciales y división de bienes. También sucesiones, derecho civil y laboral. Te escuchamos, te explicamos tu situación en palabras claras y te acompañamos en lo que decidas.</p>
       <div class="acciones">
         <a class="btn btn--wa btn--lg" href="{WA_GENERAL}" target="_blank" rel="noopener">{icono("wa")}Coordinar una entrevista</a>
-        <a class="btn btn--linea btn--lg" href="#areas">Ver áreas de práctica</a>
+        <a class="btn btn--linea btn--lg" href="#primera-consulta">Cómo es la primera consulta</a>
       </div>
       <ul class="hero__datos">
         <li><b>{D.FUNDACION}</b><span>año de fundación</span></li>
-        <li><b>{D.PUNTAJE}<span class="est">{icono("estrella")}</span></b><span>en Google</span></li>
-        <li><b>3</b><span>áreas de práctica</span></li>
+        <li><b>{ANIOS} años</b><span>acompañando a familias de Merlo</span></li>
+        <li><b>Familia</b><span>nuestra área principal</span></li>
       </ul>
     </div>
     <div class="hero__media">
-      <div class="hero__arco">{img("estudio-oficina", "Una de las abogadas del estudio en la oficina de Av. San Martín, en Merlo", "(min-width: 960px) 40vw, 90vw", eager=True)}</div>
+      <div class="hero__arco">{img("abogada-consulta", "Una de las abogadas del estudio, en la oficina de Av. San Martín, en Merlo", "(min-width: 960px) 40vw, 90vw", eager=True)}</div>
       <div class="hero__sello">
         {BALANZA}
-        <p><b>50 años de matrícula</b>Dr. Miguel Ángel Martínez, fundador. Colegio de Abogados de Morón.</p>
+        <p><b>Un estudio de familia</b>Fundado en {D.FUNDACION} por el Dr. {D.FUNDADOR}. Hoy a cargo de la Dra. {D.A_CARGO}.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sec areas" id="areas" aria-labelledby="areas-t">
+<section class="sec familia-home" id="familia" aria-labelledby="fam-t">
   <div class="wrap">
     <div class="sec__cab">
-      <p class="eyebrow">Áreas de práctica</p>
-      <h2 id="areas-t" class="h2">En qué te podemos ayudar</h2>
-      <p class="muted">Tres áreas, un mismo criterio: explicarte claro, contestarte rápido y no dejarte solo en el proceso.</p>
+      <p class="eyebrow">{icono("familia")} Nuestra área principal</p>
+      <h2 id="fam-t" class="h2">Derecho de familia</h2>
+      <p class="muted">Es el área por la que más nos consultan. Casi siempre hay una etapa difícil atrás: una separación, un desacuerdo por los chicos, una situación de violencia. Empezamos por escuchar y explicar; después vemos los caminos.</p>
     </div>
-    <div class="areas__grid">{areas_html}</div>
+    <div class="tf__grid">{temas}</div>
+    <div class="acciones">
+      <a class="btn btn--navy btn--lg" href="/familia/">Ver el área de familia</a>
+      <a class="btn btn--linea btn--lg" href="{wa("Hola! Quisiera coordinar una entrevista por un tema de familia.")}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+    </div>
   </div>
 </section>
 
-<section class="sec guia">
-  <div class="wrap guia__in reveal">
-    <div>
-      <p class="eyebrow eyebrow--claro">¿No sabés por dónde empezar?</p>
-      <h2 class="h2">Elegí tu tema y escribinos.</h2>
-      <p>No hace falta que sepas cómo se llama legalmente lo que te pasa. Tocá el tema más parecido y te llega el WhatsApp con el mensaje ya escrito.</p>
-    </div>
-    <div class="chips">{chips_html}</div>
+{bloque_consulta()}
+
+<section class="sec otras" aria-labelledby="otras-t">
+  <div class="wrap">
+    <div class="sec__cab"><p class="eyebrow">Otras áreas</p><h2 id="otras-t" class="h2">También trabajamos en</h2></div>
+    <div class="otras__grid">{otras}</div>
   </div>
 </section>
 
 <section class="sec historia" aria-labelledby="hist-t">
   <div class="wrap historia__grid">
-    <div class="historia__fotos reveal">
-      <figure class="historia__diploma">{img("diploma-uba", "Diploma de abogado de la Universidad de Buenos Aires del Dr. Miguel Ángel Martínez", "(min-width: 960px) 34vw, 90vw")}
-        <figcaption>El diploma de la UBA del fundador.</figcaption></figure>
-      <figure class="historia__premio">{img("fundador-reconocimiento", "El Dr. Miguel Ángel Martínez recibe el reconocimiento por 50 años de matrícula", "(min-width: 960px) 20vw, 50vw")}
-        <figcaption>Reconocimiento por 50 años de matrícula, 2026.</figcaption></figure>
-    </div>
+    {historia_fotos()}
     <div class="historia__txt reveal">
       <p class="eyebrow">Nuestra historia</p>
       <p class="historia__num" aria-hidden="true">{ANIOS}</p>
-      <h2 id="hist-t" class="h2">Años acompañando a las mismas familias.</h2>
-      <p>El Dr. Miguel Ángel Martínez abrió el estudio en Merlo en {D.FUNDACION}. Desde entonces pasaron por la puerta de Av. San Martín abuelos, hijos y nietos de las mismas familias: muchos de los que hoy nos consultan llegan porque sus padres ya confiaban en nosotros.</p>
-      <p>En 2026 el Colegio de Abogados de Morón le entregó un reconocimiento por sus 50 años de matrícula. Hoy el estudio sigue creciendo con una nueva generación de abogadas.</p>
+      <h2 id="hist-t" class="h2">Años acompañando a las familias de Merlo.</h2>
+      <p>El Dr. {D.FUNDADOR} abrió el estudio en Merlo en {D.FUNDACION}. Desde entonces pasaron por la puerta de Av. San Martín abuelos, hijos y nietos de las mismas familias: muchos de los que hoy nos consultan llegan porque sus padres ya se atendían acá.</p>
+      <p>En 2026 el Colegio de Abogados de Morón le entregó un reconocimiento por sus 50 años de matrícula. Hoy el estudio está a cargo de la Dra. {D.A_CARGO}, con el foco puesto en el derecho de familia.</p>
       <a class="link" href="/el-estudio/">Conocer el estudio {icono("flecha")}</a>
     </div>
-  </div>
-</section>
-
-<section class="sec pasos" aria-labelledby="pasos-t">
-  <div class="wrap">
-    <div class="sec__cab">
-      <p class="eyebrow">Cómo trabajamos</p>
-      <h2 id="pasos-t" class="h2">De tu primer mensaje a la solución</h2>
-    </div>
-    <ol class="pasos__lista">{pasos}</ol>
-    <p class="centro"><a class="link" href="/primera-consulta/">Qué llevar a la primera consulta {icono("flecha")}</a></p>
   </div>
 </section>
 
 {opiniones_html()}
 {faq_html(D.FAQ_GENERAL)}
 {cta_final()}"""
-    return pagina("/", f"Estudio Jurídico Martínez · Abogados en Merlo desde {D.FUNDACION}",
-                  f"Estudio jurídico familiar en Merlo desde {D.FUNDACION}. Abogadas de familia, laboral y civil: divorcios, cuota alimentaria, sucesiones, despidos, ART y contratos. Consultas por WhatsApp.",
+    return pagina("/", f"Abogados de familia en Merlo · Estudio Jurídico Martínez (desde {D.FUNDACION})",
+                  f"Estudio de familia en Merlo desde {D.FUNDACION}: divorcio, cuota alimentaria, tenencia y régimen de comunicación, violencia familiar y división de bienes. También sucesiones, civil y laboral. Consultas por WhatsApp.",
                   cuerpo, [schema_estudio(), schema_faq(D.FAQ_GENERAL)], "/")
+
+
+def pagina_familia():
+    a = D.AREA_FAMILIA
+    temas = "".join(f"""<a class="tf tf--grande reveal" style="--d:{i * 60}ms" href="/familia/{t["slug"]}/">
+        <p class="tf__num">{i + 1:02d}</p>
+        <h2 class="h3">{t["nombre"]}</h2>
+        <p>{t["resumen"]}</p>
+        <span class="tf__mas">Ver más {icono("flecha")}</span>
+      </a>""" for i, t in enumerate(a["temas"]))
+    wa_area = wa("Hola! Quisiera coordinar una entrevista por un tema de familia.")
+    cuerpo = f"""<section class="phero">
+  <div class="wrap phero__grid">
+    <div>
+      <nav class="migas" aria-label="Estás en"><a href="/">Inicio</a><span>/</span>Familia</nav>
+      <p class="eyebrow">{icono("familia")} Área de familia</p>
+      <h1 class="h1">{a["titulo"]}</h1>
+      <p class="phero__lema">{a["lema"]}</p>
+      {parrafos(a["intro"])}
+      <div class="acciones">
+        <a class="btn btn--wa btn--lg" href="{wa_area}" target="_blank" rel="noopener">{icono("wa")}Coordinar una entrevista</a>
+        <a class="btn btn--linea btn--lg" href="#primera-consulta">Cómo es la primera consulta</a>
+      </div>
+    </div>
+    <div class="phero__foto">{img(a["foto"], "Abogada de familia del Estudio Jurídico Martínez, en Merlo", "(min-width: 960px) 32vw, 80vw", eager=True)}</div>
+  </div>
+</section>
+
+<section class="sec familia-home" aria-labelledby="temas-t">
+  <div class="wrap">
+    <div class="sec__cab"><p class="eyebrow">Temas</p><h2 id="temas-t" class="h2">En qué te podemos ayudar</h2>
+    <p class="muted">Cada tema tiene su página, con lo que dice la ley explicado en palabras comunes.</p></div>
+    <div class="tf__grid">{temas}</div>
+  </div>
+</section>
+
+{bloque_consulta()}
+{faq_html(a["faq"])}
+{cta_final("¿Empezamos por una entrevista?", "Contanos en dos líneas qué te pasa y coordinamos día y horario. En el estudio, en Merlo, o por videollamada.")}"""
+    return pagina("/familia/", f"{a['titulo']} · Divorcio, alimentos y tenencia | Estudio Jurídico Martínez",
+                  a["meta"], cuerpo,
+                  [schema_estudio(), schema_faq(a["faq"]), schema_migas([("Inicio", "/"), ("Familia", "/familia/")])],
+                  "/familia/")
+
+
+def pagina_tema_familia(t, i):
+    ruta = f"/familia/{t['slug']}/"
+    puntos = "".join(f"<li>{icono('check')}{p}</li>" for p in t["puntos"])
+    otros = "".join(f'<a class="chip chip--claro" href="/familia/{o["slug"]}/">{o["nombre"]}</a>'
+                    for o in D.TEMAS_FAMILIA if o is not t)
+    traer = "".join(f"<li>{icono('check')}<span><b>{x}</b>{y}</span></li>" for x, y in D.LLEVAR[:4])
+    msg = wa(f"Hola! Quisiera coordinar una entrevista por un tema de {t['nombre'].lower()}.")
+    aviso = (f'<p class="aviso">{icono("escudo")}<span>{t["aviso"]}</span></p>' if t.get("aviso") else "")
+    cuerpo = f"""<section class="phero phero--tema">
+  <div class="wrap">
+    <nav class="migas" aria-label="Estás en"><a href="/">Inicio</a><span>/</span><a href="/familia/">Familia</a><span>/</span>{t["nombre"]}</nav>
+    <p class="eyebrow">{icono("familia")} Familia</p>
+    <h1 class="h1">{t["titulo"]}</h1>
+    <p class="phero__lema">{t["resumen"]}</p>
+  </div>
+</section>
+
+<section class="sec tema-pag">
+  <div class="wrap tema-pag__grid">
+    <div class="tema-pag__txt reveal">
+      {parrafos(t["intro"])}
+      {aviso}
+      <h2 class="h3">Con qué te podemos ayudar</h2>
+      <ul class="tema__lista">{puntos}</ul>
+      <div class="acciones">
+        <a class="btn btn--wa btn--lg" href="{msg}" target="_blank" rel="noopener">{icono("wa")}Consultar por {t["nombre"].lower()}</a>
+      </div>
+    </div>
+    <aside class="tema-pag__lado reveal">
+      <div class="lado__caja">
+        <h2 class="h4">Qué conviene traer</h2>
+        <ul class="traer__lista traer__lista--chica">{traer}</ul>
+        <a class="link" href="/primera-consulta/">Ver la lista completa {icono("flecha")}</a>
+      </div>
+      <div class="lado__caja lado__caja--navy">
+        <p><b>Hablemos de tu caso</b>Coordinamos una entrevista en el estudio, en Merlo, o por videollamada.</p>
+        <a class="btn btn--wa" href="{msg}" target="_blank" rel="noopener">{icono("wa")}{D.TEL_VISIBLE}</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+{faq_html(t["faq"], "Preguntas frecuentes sobre " + t["nombre"].lower())}
+
+<section class="sec otros-temas">
+  <div class="wrap">
+    <div class="sec__cab"><p class="eyebrow">Otros temas de familia</p><h2 class="h2">También trabajamos</h2></div>
+    <div class="chips chips--fila">{otros}</div>
+  </div>
+</section>
+{cta_final()}"""
+    return pagina(ruta, f"{t['titulo']} | Estudio Jurídico Martínez", t["meta"], cuerpo,
+                  [schema_estudio(), schema_faq(t["faq"]),
+                   schema_migas([("Inicio", "/"), ("Familia", "/familia/"), (t["nombre"], ruta)])], "/familia/")
 
 
 def pagina_area(a):
@@ -408,23 +513,25 @@ def pagina_area(a):
           <a class="link" href="{msg}" target="_blank" rel="noopener">{icono("wa")} Consultar por {t.lower()}</a>
         </div>
       </article>"""
-    otras = "".join(f"""<a class="otra reveal" href="/{o["slug"]}/">{icono(o["slug"])}
-        <span><b>{o["nombre"]}</b>{o["resumen"]}</span>{icono("flecha")}</a>""" for o in D.AREAS if o is not a)
+    otras = f"""<a class="otra reveal" href="/familia/">{icono("familia")}
+        <span><b>Familia</b>{D.AREA_FAMILIA["resumen"]}</span>{icono("flecha")}</a>"""
+    otras += "".join(f"""<a class="otra reveal" href="/{o["slug"]}/">{icono(o["icono"])}
+        <span><b>{o["nombre"]}</b>{o["resumen"]}</span>{icono("flecha")}</a>""" for o in D.AREAS_SEC if o is not a)
     wa_area = wa(f"Hola! Quisiera coordinar una entrevista por un tema de {a['nombre'].lower()}.")
 
     cuerpo = f"""<section class="phero">
   <div class="wrap phero__grid">
     <div>
       <nav class="migas" aria-label="Estás en"><a href="/">Inicio</a><span>/</span>{a["nombre"]}</nav>
-      <p class="eyebrow">{icono(a["slug"])} Área {a["nombre"].lower()}</p>
+      <p class="eyebrow">{icono(a["icono"])} Área {a["nombre"].lower()}</p>
       <h1 class="h1">{a["titulo"]}</h1>
       <p class="phero__lema">{a["lema"]}</p>
-      <p>{a["intro"]}</p>
+      {parrafos(a["intro"])}
       <div class="acciones">
         <a class="btn btn--wa btn--lg" href="{wa_area}" target="_blank" rel="noopener">{icono("wa")}Consultar por WhatsApp</a>
       </div>
     </div>
-    <div class="phero__foto">{img(a["foto"], f"Abogada del área de {a['nombre'].lower()} del Estudio Jurídico Martínez", "(min-width: 960px) 32vw, 80vw", eager=True)}</div>
+    <div class="phero__foto">{img(a["foto"], f"Estudio Jurídico Martínez, área {a['nombre'].lower()}, en Merlo", "(min-width: 960px) 32vw, 80vw", eager=True)}</div>
   </div>
 </section>
 
@@ -434,7 +541,7 @@ def pagina_area(a):
       <p class="eyebrow">En esta página</p>
       <ul>{indice}</ul>
       <div class="temas__caja">
-        <p><b>¿Tu caso es urgente?</b>Escribinos y te respondemos a la brevedad.</p>
+        <p><b>¿Tenés dudas?</b>Escribinos contando tu situación y coordinamos una entrevista.</p>
         <a class="btn btn--wa" href="{wa_area}" target="_blank" rel="noopener">{icono("wa")}{D.TEL_VISIBLE}</a>
       </div>
     </aside>
@@ -451,33 +558,34 @@ def pagina_area(a):
   </div>
 </section>
 {cta_final()}"""
-    return pagina(ruta, f"{a['titulo']} · {a['nombre']} | Estudio Jurídico Martínez", a["meta"], cuerpo,
+    return pagina(ruta, f"{a['titulo']} | Estudio Jurídico Martínez", a["meta"], cuerpo,
                   [schema_estudio(), schema_faq(a["faq"]), schema_migas([("Inicio", "/"), (a["nombre"], ruta)])], ruta)
 
 
 def el_estudio():
     valores = [
-        ("Cercanía", "Somos un estudio de barrio. Te atendemos nosotros, no una recepción: sabés con quién hablás."),
-        ("Claridad", "Te explicamos tu situación sin jerga. Vas a entender qué pasa, qué puede pasar y cuánto cuesta."),
+        ("Escuchar primero", "Antes de hablar de leyes, escuchamos qué te pasa. La mayoría llega en un momento difícil."),
+        ("Explicar sin jerga", "Vas a entender qué dice la ley en tu caso, qué caminos hay y qué implica cada uno."),
         ("Reserva", "Lo que nos contás queda entre nosotros. En temas de familia, la discreción es parte del trabajo."),
-        ("Experiencia", f"{ANIOS} años resolviendo los problemas de las familias de Merlo, en los tribunales de la zona."),
+        ("Continuidad", f"{ANIOS} años en el mismo lugar, atendiendo a varias generaciones de las mismas familias."),
     ]
     val = "".join(f"""<li class="valor reveal" style="--d:{i * 70}ms"><h3 class="h4">{t}</h3><p>{x}</p></li>"""
                   for i, (t, x) in enumerate(valores))
     equipo = "".join(f"""<figure class="miembro reveal" style="--d:{i * 90}ms">
-      <div class="miembro__foto">{img(a["foto"], f"Abogada del área {a['nombre'].lower()}", "(min-width: 960px) 28vw, 80vw")}</div>
+      <div class="miembro__foto">{img(a["foto"], f"Abogada del área de {a['nombre'].lower()} del estudio", "(min-width: 960px) 28vw, 80vw")}</div>
       <figcaption><b>Área {a["nombre"].lower()}</b><span>{a["resumen"]}</span>
       <a class="link" href="/{a["slug"]}/">Ver el área {icono("flecha")}</a></figcaption>
-    </figure>""" for i, a in enumerate(D.AREAS))
+    </figure>""" for i, a in enumerate([D.AREA_FAMILIA, D.AREA["laboral"], D.AREA["civil"]]))
     linea = [
         (str(D.FUNDACION), "Nace el estudio",
-         "El Dr. Miguel Ángel Martínez, abogado recibido en la Universidad de Buenos Aires, se matricula en el Colegio de Abogados de Morón y abre el estudio en Merlo."),
+         f"El Dr. {D.FUNDADOR}, abogado recibido en la Universidad de Buenos Aires, se matricula en el Colegio de "
+         "Abogados de Morón y abre el estudio en Merlo."),
         ("Décadas", "Crecer con el barrio",
          "Sucesiones, divorcios, despidos, contratos: el estudio acompaña a varias generaciones de las mismas familias merlenses."),
-        ("Hoy", "Una nueva generación",
-         "Un equipo de abogadas atiende las áreas de familia, laboral y civil y comercial, con la misma forma de trabajar: cerca y claro."),
+        ("Hoy", f"A cargo de la Dra. {D.A_CARGO}",
+         "El estudio trabaja sobre todo en derecho de familia, y también en sucesiones, civil y laboral."),
         ("2026", "50 años de matrícula",
-         "El Colegio de Abogados de Morón reconoce al Dr. Martínez por sus 50 años de ejercicio profesional."),
+         f"El Colegio de Abogados de Morón reconoce al Dr. {D.FUNDADOR} por sus 50 años de ejercicio profesional."),
     ]
     hitos = "".join(f"""<li class="hito reveal"><p class="hito__anio">{a}</p><div><h3 class="h4">{t}</h3><p>{x}</p></div></li>"""
                     for a, t, x in linea)
@@ -493,12 +601,7 @@ def el_estudio():
 
 <section class="sec">
   <div class="wrap historia__grid">
-    <div class="historia__fotos reveal">
-      <figure class="historia__diploma">{img("diploma-uba", "Diploma de abogado de la Universidad de Buenos Aires del Dr. Miguel Ángel Martínez", "(min-width: 960px) 34vw, 90vw")}
-        <figcaption>El diploma de la UBA del fundador.</figcaption></figure>
-      <figure class="historia__premio">{img("fundador-reconocimiento", "El Dr. Miguel Ángel Martínez con el reconocimiento del Colegio de Abogados de Morón", "(min-width: 960px) 20vw, 50vw")}
-        <figcaption>Colegio de Abogados de Morón, 2026.</figcaption></figure>
-    </div>
+    {historia_fotos()}
     <div>
       <p class="eyebrow">Nuestra historia</p>
       <ol class="linea">{hitos}</ol>
@@ -515,19 +618,19 @@ def el_estudio():
 
 <section class="sec" aria-labelledby="eq-t">
   <div class="wrap">
-    <div class="sec__cab"><p class="eyebrow">El equipo</p><h2 id="eq-t" class="h2">Una abogada para cada tema</h2>
-    <p class="muted">Cada área está a cargo de una profesional que se dedica a eso todos los días.</p></div>
+    <div class="sec__cab"><p class="eyebrow">El equipo</p><h2 id="eq-t" class="h2">Quiénes te van a atender</h2>
+    <p class="muted">El estudio está a cargo de la Dra. {D.A_CARGO}, que lleva el área de familia. Cada área tiene una abogada que se dedica a eso.</p></div>
     <div class="equipo__grid">{equipo}</div>
   </div>
 </section>
 
 <section class="sec espacio">
   <div class="wrap espacio__grid">
-    <figure class="reveal">{img("abogada-consulta", "Una de las abogadas del estudio, en su escritorio", "(min-width: 960px) 45vw, 90vw")}</figure>
+    <figure class="reveal">{img("estudio-oficina", "La oficina del estudio en Av. San Martín, Merlo", "(min-width: 960px) 45vw, 90vw")}</figure>
     <div class="reveal">
       <p class="eyebrow">Nuestro espacio</p>
       <h2 class="h2">Te esperamos en Av. San Martín 3285</h2>
-      <p>Un lugar tranquilo para hablar con reserva. Si no podés acercarte, hacemos la consulta por videollamada.</p>
+      <p>Un lugar tranquilo para hablar con reserva. Si no podés acercarte, la entrevista se puede hacer por videollamada.</p>
       <a class="link" href="/contacto/">Cómo llegar {icono("flecha")}</a>
     </div>
   </div>
@@ -535,8 +638,9 @@ def el_estudio():
 {opiniones_html()}
 {cta_final()}"""
     return pagina("/el-estudio/", f"El estudio · Abogados en Merlo desde {D.FUNDACION} | Estudio Jurídico Martínez",
-                  f"Fundado en {D.FUNDACION} por el Dr. Miguel Ángel Martínez, el Estudio Jurídico Martínez acompaña a las familias de Merlo hace {ANIOS} años. Conocé nuestra historia y nuestro equipo.",
-                  cuerpo, [schema_estudio(), schema_migas([("Inicio", "/"), ("El estudio", "/el-estudio/")])], "/el-estudio/")
+                  f"Fundado en {D.FUNDACION} por el Dr. {D.FUNDADOR} y hoy a cargo de la Dra. {D.A_CARGO}, el Estudio Jurídico Martínez acompaña a las familias de Merlo hace {ANIOS} años.",
+                  cuerpo, [schema_estudio(), schema_migas([("Inicio", "/"), ("El estudio", "/el-estudio/")])],
+                  "/el-estudio/")
 
 
 def primera_consulta():
@@ -544,14 +648,15 @@ def primera_consulta():
       <h3 class="h4">{t}</h3><p>{x}</p></li>""" for i, (t, x) in enumerate(D.PASOS))
     llevar = "".join(f"""<li class="llevar reveal" style="--d:{i * 60}ms"><span class="llevar__n">{i + 1:02d}</span>
       <div><h3 class="h4">{t}</h3><p>{x}</p></div></li>""" for i, (t, x) in enumerate(D.LLEVAR))
+    esperar = "".join(f"""<li class="esperar reveal"><h3 class="h4">{t}</h3><p>{x}</p></li>""" for t, x in D.ESPERAR)
     cuerpo = f"""<section class="phero">
   <div class="wrap phero__grid">
     <div>
       <nav class="migas" aria-label="Estás en"><a href="/">Inicio</a><span>/</span>Primera consulta</nav>
       <p class="eyebrow">Primera consulta</p>
-      <h1 class="h1">Tu primera consulta, <em>sin nervios</em>.</h1>
-      <p class="phero__lema">Ir a un abogado por primera vez da un poco de miedo. Te contamos cómo es y qué traer para aprovecharla al máximo.</p>
-      <div class="acciones"><a class="btn btn--wa btn--lg" href="{WA_GENERAL}" target="_blank" rel="noopener">{icono("wa")}Pedir una entrevista</a></div>
+      <h1 class="h1">Cómo es la primera entrevista</h1>
+      <p class="phero__lema">Ir a un abogado por primera vez pone nerviosa a cualquiera. Te contamos cómo es, qué conviene traer y qué podés esperar.</p>
+      <div class="acciones"><a class="btn btn--wa btn--lg" href="{WA_GENERAL}" target="_blank" rel="noopener">{icono("wa")}Coordinar una entrevista</a></div>
     </div>
     <div class="phero__foto">{img("estudio-oficina", "La oficina del estudio en Merlo", "(min-width: 960px) 32vw, 80vw", eager=True)}</div>
   </div>
@@ -559,33 +664,43 @@ def primera_consulta():
 
 <section class="sec pasos">
   <div class="wrap">
-    <div class="sec__cab"><p class="eyebrow">Paso a paso</p><h2 class="h2">Cómo es</h2></div>
+    <div class="sec__cab"><p class="eyebrow">Paso a paso</p><h2 class="h2">De tu primer mensaje a la entrevista</h2></div>
     <ol class="pasos__lista">{pasos}</ol>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec__cab"><p class="eyebrow">Qué esperar</p><h2 class="h2">Cómo trabajamos en la entrevista</h2></div>
+    <ul class="esperar__lista esperar__lista--grid">{esperar}</ul>
   </div>
 </section>
 
 <section class="sec llevar-sec">
   <div class="wrap">
-    <div class="sec__cab"><p class="eyebrow">Checklist</p><h2 class="h2">6 cosas que te ayudan a aprovechar la consulta</h2></div>
+    <div class="sec__cab"><p class="eyebrow">Checklist</p><h2 class="h2">Qué conviene traer</h2>
+    <p class="muted">No es excluyente: si te falta algo, vení igual y vemos cómo conseguirlo.</p></div>
     <ol class="llevar__grid">{llevar}</ol>
   </div>
 </section>
 {faq_html(D.FAQ_GENERAL)}
-{cta_final("¿Lista la lista?", "Escribinos y coordinamos día y horario. Presencial en Merlo o por videollamada.")}"""
-    return pagina("/primera-consulta/", "Primera consulta con una abogada: qué llevar | Estudio Jurídico Martínez",
-                  "Cómo es la primera consulta en el Estudio Jurídico Martínez de Merlo y 6 cosas para llevar: documentos, fechas y preguntas. Presencial o por videollamada.",
+{cta_final("¿Coordinamos?", "Escribinos contando brevemente qué necesitás y vemos día y horario. Presencial en Merlo o por videollamada.")}"""
+    return pagina("/primera-consulta/", "Primera consulta con un abogado: cómo es y qué llevar | Estudio Jurídico Martínez",
+                  "Cómo es la primera entrevista en el Estudio Jurídico Martínez de Merlo, qué documentación conviene traer y qué podés esperar. Presencial o por videollamada.",
                   cuerpo, [schema_estudio(), schema_faq(D.FAQ_GENERAL),
-                           schema_migas([("Inicio", "/"), ("Primera consulta", "/primera-consulta/")])], "/primera-consulta/")
+                           schema_migas([("Inicio", "/"), ("Primera consulta", "/primera-consulta/")])],
+                  "/primera-consulta/")
 
 
 def contacto():
-    opciones = "".join(f'<option value="{a["nombre"]}">{a["nombre"]}</option>' for a in D.AREAS)
+    opciones = "".join(f'<option value="{t["nombre"]}">Familia · {t["nombre"]}</option>' for t in D.TEMAS_FAMILIA)
+    opciones += "".join(f'<option value="{a["nombre"]}">{a["nombre"]}</option>' for a in D.AREAS_SEC)
     horarios = "".join(f"<li><span>{d}</span><b>{h}</b></li>" for d, h in D.HORARIOS)
     cuerpo = f"""<section class="phero phero--centro">
   <div class="wrap">
     <nav class="migas" aria-label="Estás en"><a href="/">Inicio</a><span>/</span>Contacto</nav>
     <p class="eyebrow">Contacto</p>
-    <h1 class="h1">Hablemos de tu caso</h1>
+    <h1 class="h1">Hablemos de tu situación</h1>
     <p class="phero__lema">Escribinos por WhatsApp o acercate al estudio. Todo lo que nos cuentes es confidencial.</p>
   </div>
 </section>
@@ -594,9 +709,9 @@ def contacto():
   <div class="wrap contacto__grid">
     <form class="form reveal" id="form-wa" data-wa="{D.WHATSAPP}" novalidate>
       <h2 class="h3">Armá tu mensaje</h2>
-      <p class="muted">Completá estos datos y se abre WhatsApp con el mensaje listo. No guardamos nada en ningún servidor.</p>
+      <p class="muted">Completá estos datos y se abre WhatsApp con el mensaje listo. No se guarda nada en ningún servidor.</p>
       <label>Tu nombre<input name="nombre" autocomplete="name" required></label>
-      <label>Área
+      <label>Tema
         <select name="area"><option value="">No sé / otro tema</option>{opciones}</select>
       </label>
       <label>Contanos brevemente qué pasa<textarea name="detalle" rows="4" placeholder="Por ejemplo: me separé y quiero acordar la cuota de mis hijos."></textarea></label>
@@ -615,7 +730,7 @@ def contacto():
         <li>{icono("ig")}<div><span>Instagram</span><a href="{D.INSTAGRAM}" target="_blank" rel="noopener">@estudio.juridico.martinez</a></div></li>
       </ul>
       <div class="horario"><h2 class="h4">{icono("reloj")} Horario de atención</h2><ul>{horarios}</ul></div>
-      <figure class="contacto__fachada">{img("fachada", "Fachada del Estudio Jurídico Martínez en Av. José de San Martín 3285, Merlo", "(min-width: 960px) 20vw, 45vw")}
+      <figure class="contacto__fachada">{img("fachada", f"Fachada del Estudio Jurídico Martínez en {D.DIRECCION}, {D.LOCALIDAD}", "(min-width: 960px) 20vw, 45vw")}
         <figcaption>Buscá la puerta con el cartel del estudio, en Av. San Martín 3285.</figcaption></figure>
     </div>
   </div>
@@ -624,7 +739,7 @@ def contacto():
   </div>
 </section>"""
     return pagina("/contacto/", "Contacto · Abogados en Merlo | Estudio Jurídico Martínez",
-                  f"Contactá al Estudio Jurídico Martínez: WhatsApp {D.TEL_VISIBLE}, {D.DIRECCION}, {D.LOCALIDAD}. Consultas presenciales o por videollamada.",
+                  f"Contactá al Estudio Jurídico Martínez: WhatsApp {D.TEL_VISIBLE}, {D.DIRECCION}, {D.LOCALIDAD}. Entrevistas presenciales o por videollamada.",
                   cuerpo, [schema_estudio(), schema_migas([("Inicio", "/"), ("Contacto", "/contacto/")])], "/contacto/")
 
 
@@ -647,8 +762,11 @@ def no_encontrada():
 # ---------------------------------------------------------------- archivos de soporte
 
 def soporte():
-    rutas = ["/", "/familia/", "/laboral/", "/civil-comercial/", "/el-estudio/", "/primera-consulta/", "/contacto/"]
-    urls = "".join(f"<url><loc>{D.SITIO}{r}</loc><lastmod>{HOY}</lastmod></url>" for r in rutas)
+    rutas = [("/", "1.0"), ("/familia/", "0.9")]
+    rutas += [(f"/familia/{t['slug']}/", "0.8") for t in D.TEMAS_FAMILIA]
+    rutas += [(f"/{a['slug']}/", "0.7") for a in D.AREAS_SEC]
+    rutas += [("/primera-consulta/", "0.7"), ("/el-estudio/", "0.6"), ("/contacto/", "0.6")]
+    urls = "".join(f"<url><loc>{D.SITIO}{r}</loc><lastmod>{HOY}</lastmod><priority>{p}</priority></url>" for r, p in rutas)
     (ROOT / "sitemap.xml").write_text(
         f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n',
         encoding="utf-8")
@@ -669,7 +787,10 @@ def soporte():
 
 if __name__ == "__main__":
     escribir("/", home())
-    for a in D.AREAS:
+    escribir("/familia/", pagina_familia())
+    for i, t in enumerate(D.TEMAS_FAMILIA):
+        escribir(f"/familia/{t['slug']}/", pagina_tema_familia(t, i))
+    for a in D.AREAS_SEC:
         escribir(f"/{a['slug']}/", pagina_area(a))
     escribir("/el-estudio/", el_estudio())
     escribir("/primera-consulta/", primera_consulta())

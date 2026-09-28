@@ -27,3 +27,29 @@
 - **Fotos**: las del IG son chicas (640 px) y con fondos de colores distintos; los retratos del equipo van en duotono navy-crema para que se vean como un set. La foto de la oficina y el diploma de la UBA de 1976 van a color: son la prueba de los 50 años.
 - **Diferencial**: nadie en Merlo puede decir "desde 1976" con un diploma y un reconocimiento del Colegio de Abogados. Se usa como el hilo de toda la web ("tres generaciones de familias merlenses").
 - **Conversión**: todo lleva a WhatsApp con el tema ya escrito (cada área y cada tema tienen su mensaje). En contacto, un formulario que arma el mensaje (tema + nombre + breve descripción) sin guardar datos en ningún servidor: en un estudio de familia la confidencialidad es un argumento de venta.
+
+
+## Reorganización del 28/09/2026 (pedido de la clienta)
+
+María José Martínez confirmó que **familia es el área que más consultas trae** y que ella está a cargo del estudio.
+Se reorganizó todo el sitio alrededor de eso:
+
+- **Orden de áreas**: Familia (primera y con mucho más peso: sección propia en la home y página por tema) →
+  Sucesiones → Civil (daños y perjuicios, usucapión, contratos, alquileres, deudas, sociedades) → Laboral.
+  Sucesiones salió de adentro de familia y pasó a ser un área propia; "Civil y comercial" pasó a llamarse Civil
+  (la URL `/civil-comercial/` se reemplazó por `/civil/`, el sitio todavía no estaba publicado).
+- **Familia desglosada** en seis páginas propias, que son las búsquedas reales de la gente: divorcio,
+  tenencia y régimen de comunicación, cuota alimentaria, violencia familiar, uniones convivenciales y división de bienes.
+  En tenencia se aclara que hoy la ley la llama "cuidado personal", porque la gente busca "tenencia".
+- **Tono**: calmo y sin lenguaje comercial. Nada de promesas de resultado, de rapidez, de honorarios como gancho ni
+  comparaciones con otros estudios (lo prohíben las normas de ética del Colegio de Abogados). Se sacó
+  "contestarte rápido", "te respondemos a la brevedad" y "resolvemos". Lo que reemplaza a eso, y es lo que
+  convierte en este rubro: explicar cómo es la primera entrevista, qué se conversa y qué documentación conviene traer.
+- **Bloque de primera consulta** en la home y en familia (qué esperar + qué traer), y la página
+  `/primera-consulta/` ampliada.
+- En violencia familiar se agregó un aviso con el 911 y la línea 144.
+- **SEO**: la home apunta a "abogado/abogada de familia Merlo"; cada tema de familia tiene su propio title,
+  meta description y H1 ("Divorcio en Merlo", "Cuota alimentaria en Merlo", "Tenencia de hijos y régimen de
+  comunicación en Merlo"...). Sucesiones, civil y laboral conservan sus propias páginas y metadatos.
+- Las opiniones de Google quedaron, pero presentadas como lo que son ("Opiniones publicadas en Google"),
+  sin titular elogioso.

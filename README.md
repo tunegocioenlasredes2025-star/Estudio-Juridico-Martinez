@@ -19,7 +19,13 @@ python _build/build.py            # regenera todas las páginas, sitemap, robots
 
 ## Páginas
 
-`/` · `/familia/` · `/laboral/` · `/civil-comercial/` · `/el-estudio/` · `/primera-consulta/` · `/contacto/` · `404.html`
+`/` · `/familia/` (+ una página por tema: divorcio, tenencia-y-regimen-de-comunicacion, cuota-alimentaria,
+violencia-familiar, uniones-convivenciales, division-de-bienes) · `/sucesiones/` · `/civil/` · `/laboral/` ·
+`/el-estudio/` · `/primera-consulta/` · `/contacto/` · `404.html`
+
+El sitio está orientado a **derecho de familia**, que es el área que más consultas trae. El tono es calmo y sin
+lenguaje comercial: nada de promesas de resultado, de rapidez ni de honorarios como gancho (normas de ética del
+Colegio de Abogados).
 
 ## Pendientes
 
