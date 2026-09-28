@@ -5,7 +5,7 @@ y sin comparaciones con otros estudios (lo pide la ética profesional del Colegi
 """
 
 NOMBRE = "Estudio Jurídico Martínez"
-SITIO = "https://estudio-juridico-martinez.vercel.app"  # cambiar cuando tenga dominio propio
+SITIO = "https://estudio-juridico-martinez-merlo.vercel.app"  # cambiar cuando tenga dominio propio
 WHATSAPP = "5491132176540"
 TEL_VISIBLE = "11 3217-6540"
 INSTAGRAM = "https://www.instagram.com/estudio.juridico.martinez/"
